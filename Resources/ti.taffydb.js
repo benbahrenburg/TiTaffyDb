@@ -2,8 +2,8 @@
 /*
 
 Project Name : TiTaffyDb
-Publisher:	Ben Bahrenburg ( twitter @benCoding)
-About:	This project is a Titanium Port of the TaffyDb created by Ian Smit ( twitter @mriansmith) project available at taffydb.com 
+Ti Hacker: Ben Bahrenburg ( twitter @benCoding)
+About: This project is a Titanium Port of the TaffyDb created by Ian Smit ( twitter @mriansmith) project available at taffydb.com 
 To make TaffyDb more Titanium friendly several updates have been made, please check the readme for details.
 
 ==============================================================================================================================
@@ -40,7 +40,7 @@ var TiHelpers={};
 	};	
 	function findPersistMode(settings){
 		var results = 'file';
-		if(settings.hasOwnProperty(persistMode)){
+		if(settings.hasOwnProperty('persistMode')){
 			if((settings.persistMode!==undefined)&&(settings.persistMode!==null)){
 				results=settings.persistMode;
 			}
@@ -1580,7 +1580,7 @@ var TAFFY;
                     // * Save the Db contents to the presistence mode in settings (default is file)
                     // * Throw error if no db Name is provided
                     // **************************************** 
-                   	if(TiHelpers.safeString(dbName).trim().length>0){
+                   	if(TiHelpers.safeString(name).trim().length>0){
                    		settings.storageName=name; //Make sure we keep the settings correct
                    	}else{
                    		//Check if we have something in our settings file from before
