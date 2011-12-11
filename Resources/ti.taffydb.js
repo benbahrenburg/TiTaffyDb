@@ -1,23 +1,33 @@
 /*jslint maxerr:10000 */
 /*
 
+Project Name : 		TiTaffyDb
+Publisher:			Ben Bahrenburg ( twitter @benCoding)
+About:				This project is a Titanium Port of the TaffyDb created by Ian Smit ( twitter @mriansmith) project available at taffydb.com
+
+					To make TaffyDb more Titanium friendly several updates have been made, please check the readme for details.
+
+==============================================================================================================================
+TAFFYDB LICENSE SECTION
+
 Software License Agreement (BSD License)
 http://taffydb.com
 Copyright (c)
 All rights reserved.
 
-
 Redistribution and use of this software in source and binary forms, with or without modification, are permitted provided that the following condition is met:
-
-* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
 LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+==============================================================================================================================
 */
-// Setup TAFFY Function (nameSpace) to return an object with methods.
+
 
 var TiHelpers={};
+// ****************************************
+// * Helpers to make this work with Titanium
+// ****************************************
 (function () {
 	TiHelpers.safeString = function(value){
 		if(value==undefined){
@@ -152,7 +162,7 @@ var TiHelpers={};
 	};		
 })();
 
-
+// Setup TAFFY Function (nameSpace) to return an object with methods.
 var TAFFY; 
 (function () {
         // TC = Counter for Taffy DBs on page, used for unique IDs
@@ -1130,10 +1140,15 @@ var TAFFY;
                         		settings.onDBChange.call(TOb);
                         	},0)
                         }
-                        if ((settings.autoCommit)&&(TiHelpers.safeString(settings.storageName).trim().length >0)) {
-                        	setTimeout(function () {
-                        		root.saveDb(settings.storageName)
-                        	});
+                        //Only push if we have auto commit, this avoids IO issues 
+                        //but requires the user commits or saves to persist their changes
+                        if (settings.autoCommit) {
+                        	//Even if autoCommit is enabled they need to provide a name
+                        	if(TiHelpers.safeString(settings.storageName).trim().length >0){
+	                        	setTimeout(function () {
+	                        		root.saveDb(settings.storageName)
+	                        	});                        		
+                        	}
                         }
                         return dm;
                     },
