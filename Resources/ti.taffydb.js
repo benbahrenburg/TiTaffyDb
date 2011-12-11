@@ -1,11 +1,10 @@
 /*jslint maxerr:10000 */
 /*
 
-Project Name : 		TiTaffyDb
-Publisher:			Ben Bahrenburg ( twitter @benCoding)
-About:				This project is a Titanium Port of the TaffyDb created by Ian Smit ( twitter @mriansmith) project available at taffydb.com
-
-					To make TaffyDb more Titanium friendly several updates have been made, please check the readme for details.
+Project Name : TiTaffyDb
+Publisher:	Ben Bahrenburg ( twitter @benCoding)
+About:	This project is a Titanium Port of the TaffyDb created by Ian Smit ( twitter @mriansmith) project available at taffydb.com 
+To make TaffyDb more Titanium friendly several updates have been made, please check the readme for details.
 
 ==============================================================================================================================
 TAFFYDB LICENSE SECTION
