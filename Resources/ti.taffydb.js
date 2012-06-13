@@ -1554,12 +1554,16 @@ var TAFFY;
                			throw "No db name provided";	
                     }	
                                     					
-					TOb=TiHelpers.readTaffyDb(settings.storageName,settings);
+					var d = TiHelpers.readTaffyDb(name,settings);
+					DBI.resetDb();
+					DBI.insert(d);
+
+					// TOb=TiHelpers.readTaffyDb(settings.storageName,settings);
 					//If there wasn't anything returned
 					//assuming we are resettings
-					if(TOb===null){
-						DBI.resetDb();
-					}
+					// if(TOb===null){
+					// 	DBI.resetDb();
+					// }
 					dirtyTransCount=0; //Set the dirty transaction count to zero
 					return root;
 				}
