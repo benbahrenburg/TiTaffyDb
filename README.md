@@ -1,84 +1,90 @@
-<h1>TiTaffyDb</h1>
+TaffyDb4Ti
 ==========
 
-<h2>TaffyDb for Titanium</h2>
+###WARNING
 
-TiTaffyDb is a Titanium wrapper around [TaffyDb](http://www.taffydb.com) created by [Ian Smith](https://twitter.com/biastoact).
+The original code can be found in the [**Release1**](https://github.com/benbahrenburg/TiTaffyDb/tree/Release1) branch. 
 
-For examples, and full documentation please visit (taffydb.com)[http://www.taffydb.com] for details.
+Please be **aware** that this version **HAS BREAKING** changes compared with the original. However the changes are not too big and they should be easy to be implemented.
+
+This version aims to an easier update of the TaffyDb library in the future and a simplification of the APIs.
 
 
-<h2>Example</h2>
+###TaffyDb for Titanium
 
-Below is a sample app.js demonstrating how to use TiTaffyDb in your Titanium Mobile Project.  For a fully working demo project please see the example folder.
 
-<pre><code>
-//Bring the commonJs module into our project
-Ti.taffy = require('ti.taffydb').taffyDb;
+**Full credit** goes to [Ben Bahrenburg](https://github.com/benbahrenburg/TiTaffyDb) for the initial implementation of TaffyDB for Titanium,
+and to [Ian Smith](http://www.taffydb.com/) for the great TaffyDB library.
 
-//Create a new database with some records
-var newsfeed = Ti.taffy ([
-    {"id":1,"user":"kmart77","stars":3,"text":"JavaScript is a meal best served cold"},
-    {"id":2,"user":"lukeisyourfather","stars":5,"text":"Anyone want to meet tonight at Fado?"},
-    {"id":3,"user":"bemine","stars":3,"text":"I reallylike the new prirotity inbox #gmail"},
-    {"id":4,"user":"keepit","stars":3,"text":"Laughing at this weeks fails video."},
-    {"id":5,"user":"piegirl22","stars":3,"text":"It is impossible to change your clothes in a public bathroom. Ick."},
-    {"id":6,"user":"kmart77","stars":3,"text":"@kmart77: Have fun in New York!"},
-    {"id":7,"user":"justinb","stars":5,"text":"Please set the noise level to earthquake"}
-]);
 
-var newFeedCount = newsfeed().count(); // returns 7
-Ti.API.info('Records in newfeed =' + newFeedCount);
+The version used in the [**Release1**](https://github.com/benbahrenburg/TiTaffyDb/tree/Release1) branch of TiTaffyDb has a bug (I think the bug is in the older version of TaffyDB used by this module) that doesn't allow multiple dbs in the same file. There are query caching optimizations that make the data to be overwriten for the same query on two different dbs.
 
-Ti.API.info('sort records by username');
-newsfeed.sort("user") 
+How the TiTaffyDb implementation goes deep integrated into TaffyDb, a simple update to the latest version was too much for me (I'm too lazy) so I **stole** some code from Ben and created a simpler wrapper for TaffyDb.
 
-Ti.API.info('filter for posts where user is equal to kmart77');
-newsfeed({user:"kmart77"}).count() // returns 1
+The syntax is cleaner (in my opinion) and the update to a future version of Taffy should be painless.
 
-Ti.API.info('updates the star rating, returns a query object');
-newsfeed({id:"1"}).update({stars:5});
+####TODO
+- Right now the only storage method is to a file. I will add, maybe :), storing to properties. 
+- I tested it only on iOs, but the Ben's version was working just fine on Android so I see no reason why this version wouldn't. Anyway, I'll run some test and update this howto.
 
-Ti.API.info('inserts a new record');
-newsfeed.insert({"id":8,"user":"justinb","stars":3,"text":"Have a great weekend everyone!"});
 
-Ti.API.info('removes all records for user kmart77');
-newsfeed({user:"kmart77"}).remove();
+####How to
 
-Ti.API.info('Save contents');
-newsfeed.save('test1');
+#####Create a database - plain simple
+The constructor accepts as argument the name of the store where the data wil reside.
 
-Ti.API.info('After reset this many rows are left ' + newsfeed().count());
+```
+var taffy = require('/taffydb4ti').taffy;
 
-Ti.API.info('Can this to see if a db is stored ')
-Ti.API.info('Does db test1 exist ' + newsfeed.exists('test1'));
-Ti.API.info('How about does db test2 exist ' + newsfeed.exists('test2'));
+var my_db = new taffy('my_db_store_name');
 
-Ti.API.info('Reload our db contents');
-newsfeed.open('test1');
-Ti.API.info('After reloading the db how many rows do we have? ' + newsfeed().count());
+my_db.insert({my_value:'first'});
+my_db.insert({my_value:'second'});
 
-Ti.API.info('Distroy the db');
-newsfeed.destroy();
+my_db.save();
 
-Ti.API.info('After destroying the db rows do we have? ' + newsfeed().count());
-Ti.API.info('Does db test1 exist ' + newsfeed.exists('test1'));
+```
 
-</code></pre>
+#####Create a database - passing taffydb settings
+More about [Taffy settings](http://www.taffydb.com/workingwithdata) (scroll to **db.settings()** )
 
-<h2>Licensing & Support</h2>
+```
+var taffy = (require('/taffydb4ti').taffy;
 
-This project is licensed under the OSI approved Apache Public License (version 2). For details please see the license associated with each project.
+var my_db = new taffy('my_db_store_name',{onInsert: function(){alert('We had an insert!')}});
 
-Developed by [Ben Bahrenburg](http://bahrenburgs.com) available on twitter [@benCoding](http://twitter.com/benCoding)
+my_db.insert({my_value:'first'});
+my_db.insert({my_value:'second'});
 
-<h2>Learn More</h2>
+my_db.save();
 
-<h3>Twitter</h3>
+```
+#####Create a database - autocommit
+This setting will autosave each change you are doing to the database. While handy, if you have many operation on the the db I suggest not to use it and call **db.save()** yourself.
+Of course **autocommit** can be used together with taffy settings.
 
-Please consider following the [@benCoding Twitter](http://www.twitter.com/benCoding) for updates 
-and more about Titanium.
+```
+var taffy = (require('/taffydb4ti').taffy;
 
-<h3>Blog</h3>
+var my_db = new taffy('my_db_store_name',{autocommit:true});
 
-For module updates, Titanium tutorials and more please check out my blog at [benCoding.Com](http://benCoding.com).
+my_db.insert({my_value:'first'});
+my_db.insert({my_value:'second'});
+
+// no need for my_db.save() anymore;
+
+```
+
+####License
+TaffyDB is licensed under the BSD licence type.
+
+TiTaffyDb is under the OSI approved Apache Public License (version 2).
+
+
+As long as you respect the above licenses I don't care what you do with the code.
+
+Just have fun :)
+
+
+####Changes by Daniel Tamas
+[@dan_tamas](https://twitter.com/dan_tamas)
