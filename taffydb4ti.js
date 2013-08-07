@@ -1856,12 +1856,12 @@ var TAFFY, exports, T;
 
 if (typeof(exports) === 'object') {
 
-exports.taffy = function(dbName, settings) {
+exports.taffy = function(dbName, settings,inData) {
 		if (!dbName) {
 			throw "Invalid TaffyDb file";
 			return
 		};
-	
+		
 		var db;
 		var parent = Ti.Filesystem.applicationDataDirectory;
 		var taffFolder = Ti.Filesystem.getFile(parent, 'titaffydb');
@@ -1871,22 +1871,26 @@ exports.taffy = function(dbName, settings) {
 		
 		var taffFolder = parent + 'titaffydb';			
 		var taffyFile = Ti.Filesystem.getFile(taffFolder, dbName.toUpperCase());
-
-		if(taffyFile.exists()){
-			try{
-				var contents = taffyFile.read();
-				if(contents==null){
-					db = TAFFY();
-					return null;
-				}else{
-					db = TAFFY(JSON.parse(contents.text));
+		
+		if (!inData){ 
+			if(taffyFile.exists()){
+				try{
+					var contents = taffyFile.read();
+					if(contents==null){
+						db = TAFFY();
+						return null;
+					}else{
+						db = TAFFY(JSON.parse(contents.text));
+					}
+				}catch(err){
+					Ti.API.error('TaffyDb Load Error: ' + err);
+					throw "Invalid TaffyDb file";
 				}
-			}catch(err){
-				Ti.API.error('TaffyDb Load Error: ' + err);
-				throw "Invalid TaffyDb file";
+			}else{
+				db = TAFFY();
 			}
 		}else{
-			db = TAFFY();
+			db = TAFFY(inData);
 		}
 
 		db.settings(settings||null);
