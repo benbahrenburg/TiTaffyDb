@@ -75,6 +75,29 @@ my_db.insert({my_value:'second'});
 
 ```
 
+#####Instantiate taffydb4ti with initial data
+To load taffydb4ti with a pre-defined JSON string, you pass data as a third parameter.
+
+```
+var taffy = (require('/taffydb4ti').taffy;
+var inJSON=[
+	{manufacturer:'Apple',model:'iPhone',version:'4'},
+	{manufacturer:'Apple',model:'iPhone',version:'4S'},
+	{manufacturer:'Apple',model:'iPhone',version:'5'},
+	{manufacturer:'Apple',model:'iPod',version:'4th Gen'},
+	{manufacturer:'Apple',model:'iPad',version:'2'}
+];
+
+var my_db = new taffy('my_db_store_name',{autocommit:true},inJSON);
+
+my_db().each(function (rec) {
+	console.log(rec.manufacturer + '-' + rec.model + '-' + rec.version)
+});
+
+
+```
+
+
 ####License
 TaffyDB is licensed under the BSD licence type.
 
@@ -88,4 +111,8 @@ Just have fun :)
 
 ####Changes by Daniel Tamas
 [@dan_tamas](https://twitter.com/dan_tamas)
+
+####Additional changes by Ricardo Alcocer
+[@ricardoalcocer](https://twitter.com/ricardoalcocer)
+
 
